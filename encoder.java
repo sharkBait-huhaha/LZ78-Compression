@@ -6,13 +6,14 @@ import java.util.ArrayList;
 
 class Encoder{
     public static void main(String[] args){
+	//Note to self: make nextID a static variable of TrieNode
 	int bufMax=256, nextID=1;
 	File fileOut;
 	FileInputStream in;
 	FileOutputStream out;
 	TrieNode trie=new TrieNode(0,(byte)0);
-	byte c, buf[]=new byte[bufMax];
-	String s, pair="";
+	byte c, buf[]=new byte[bufMax], temp;
+	String s, pair="", next="";
 	
         try{
 	    /*if(args.length!=2)
@@ -37,31 +38,35 @@ class Encoder{
 	    }
 	    out=new FileOutputStream(args[1]);
 	    */
-            while((c=(byte)System.in())!=(byte)-1){
+            while((c=(byte)System.in.read())!=(byte)-1){
 		for(int i=0;i<buf.length;i++)
 		    if(buf[i]==(byte)0){
 			buf[i]=c;
 			i=buf.length;
 		    }
-		if((pair=trie.find(buf)).length()==2){
-		    out.write((pair+"\n").getBytes());
+		if((next=trie.find(buf)).length()==2){
+		    pair=next;
+		}else{
+		    System.out.println(pair);
 		    //is there a way to add the child without a second traverse of the trie?
 		    trie.add(nextID, buf);
 		    nextID++;
+		    temp=buf[buf.length-1];
 		    buf=new byte[bufMax];
+		    buf[0]=temp;
 		}
             }
 	    if(buf[0]!=(byte)0)
-		out.write((pair+"\n").getBytes());
-	    out.write(4);
+		System.out.print(pair);
+	    System.out.print("\u0004");
 	    
 	    //}catch(FileNotFoundException e){
 	    //System.out.println("Invalid file given as argument");
 	    //System.out.println("Usage: java Encoder <File Input> <File Output>");
 	}catch(IOException e){
-	    System.out.println("Usage: java Encoder <File Input> <File Output>");
+	    System.err.println("Usage: java Encoder <File Input> <File Output>");
 	}catch(Exception e){
-	    System.out.println("error:");
+	    System.err.println("error:");
 	    e.printStackTrace();
 	}
     }
