@@ -15,8 +15,8 @@ class Encoder{
 	String s, pair="";
 	
         try{
-	    if(args.length!=2)
-		throw new IOException();
+	    /*if(args.length!=2)
+	    	throw new IOException();
             in=new FileInputStream(args[0]);
 	    fileOut=new File(args[1]);
 	    if(!fileOut.createNewFile()){
@@ -36,8 +36,8 @@ class Encoder{
 		fileOut.createNewFile();
 	    }
 	    out=new FileOutputStream(args[1]);
-	    
-            while((c=(byte)in.read())!=(byte)-1){
+	    */
+            while((c=(byte)System.in())!=(byte)-1){
 		for(int i=0;i<buf.length;i++)
 		    if(buf[i]==(byte)0){
 			buf[i]=c;
