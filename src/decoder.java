@@ -1,44 +1,61 @@
 //1255668
 //Amarjot Parmar
-
-//http://stackoverflow.com/questions/8654141/convert-byte-to-string-in-java
-//https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html
-
-import sun.misc.IOUtils;
-import sun.nio.ch.IOUtil;
+//http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
 import java.io.*;
-import java.util.Scanner;
+
 
 class decoder
 {
+
+
     public static void main(String []args)
     {
         System.err.println();
         System.err.println("-- Decoder Started --");
-        byte input;
+        int input;
 
+        int[] IDArray = new int[20];
+        int[] DataArray = new int[20];
+        int index = 1;
         //Get Standard Input
         try
         {
+            IDArray[0] = 0;
+            DataArray[0] = 0;
             System.err.println("");
             System.err.println("--  INPUT  --");
-            while((input = (byte) System.in.read()) != -1)
+            //Store Nothing in 0 index of arrays
+            while((input =System.in.read()) != -1)
             {
-                //Store it into list
-                //Work with list and output original text
 
-                //Printing output as String
-                System.err.print(""+ new String(new byte[] {input}));
-                //Printing output as Byte
-                System.err.print(input);
+                int inputInINT = getIntFromAxcii(input);
+                if(inputInINT != 100001) {
+                    if (DataArray[inputInINT] == 0) {
+                        IDArray[index] = inputInINT;
 
-                input = (byte) System.in.read();
-                //Work with list and output original text
-                //Store it into list
-                System.err.print(""+ new String(new byte[] {input}));
-                System.err.print(input);
+                        input = System.in.read();
+                        DataArray[index] = input;
+
+                        System.out.print(getIntToString(DataArray[index]));
+
+                    } else {
+                        System.out.print(getIntToString(DataArray[inputInINT]));
+                        IDArray[index] = inputInINT;
+
+                        input = System.in.read();
+                        DataArray[index] = input;
+                        System.out.print(getIntToString(DataArray[index]));
+
+                    }
+                    index++;
+                }
+
             }
+            System.out.println("");
+            System.out.println("Printing Arrays");
+            dumpArrays(IDArray,true);
+            dumpArrays(DataArray,false);
 
         }
         catch(Exception e)
@@ -46,51 +63,41 @@ class decoder
             System.err.println("Error : " + e);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
+    }
+    private static void dumpArrays(int [] array,boolean ID) throws UnsupportedEncodingException {
+        for(int x =1; x <array.length; x++ )
+        {
+            if(ID) {
+                System.out.print(array[x]);
+            }
+            else {
+                System.out.print(getIntToString(array[x]));
+            }
+        }
+        System.out.println("");
+    }
+    private static int getIntFromAxcii(int n)
+    {
         try
         {
-            //if input/output file not given
-            if(args.length != 2)
-            {
-                System.out.println("Useage: java decoder <Input File> <Output File> !!");
-                return;
-            }
-            //Storing data into a list/array
-            ExtractInput(args[0]);
+            byte nn = (byte) n;
+            String byteToString = new String(new byte[]{nn},"us-ascii");
+            int x = Integer.parseInt(byteToString);
+            return x;
         }
-        catch(Exception e)
+        catch (NumberFormatException e)
         {
-            System.out.println("Error : " + e);
+            return 100001;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return 1000001;
         }
-        */
     }
-
+    private static String getIntToString(int n) throws UnsupportedEncodingException {
+        byte nn = (byte) n;
+        String byteToString = new String(new byte[]{nn},"us-ascii");
+        return byteToString;
+    }
     private static void ExtractInput(String inputFile) throws IOException {
         FileInputStream in  = new FileInputStream(inputFile);
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
