@@ -3,10 +3,15 @@
 //http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 
 class decoder
 {
+    protected static int index =1;
+    protected static int[] IDArray = new int[20];
+    protected static int[] DataArray = new int[20];
 
 
     public static void main(String []args)
@@ -15,9 +20,6 @@ class decoder
         System.err.println("-- Decoder Started --");
         int input;
 
-        int[] IDArray = new int[20];
-        int[] DataArray = new int[20];
-        int index = 1;
         //Get Standard Input
         try
         {
@@ -30,27 +32,27 @@ class decoder
             {
 
                 int inputInINT = getIntFromAxcii(input);
-                if(inputInINT != 100001) {
-                    if (DataArray[inputInINT] == 0) {
-                        IDArray[index] = inputInINT;
 
-                        input = System.in.read();
-                        DataArray[index] = input;
+                    if (inputInINT != 100001) {
+                        if (DataArray[inputInINT] == 0) {
+                            IDArray[index] = inputInINT;
 
-                        System.out.print(getIntToString(DataArray[index]));
+                            input = System.in.read();
+                            DataArray[index] = input;
 
-                    } else {
-                        System.out.print(getIntToString(DataArray[inputInINT]));
-                        IDArray[index] = inputInINT;
+                            System.out.print(getIntToString(DataArray[index]));
 
-                        input = System.in.read();
-                        DataArray[index] = input;
-                        System.out.print(getIntToString(DataArray[index]));
+                        } else {
+                            System.out.print(getIntToString(DataArray[inputInINT]));
+                            IDArray[index] = inputInINT;
 
+                            input = System.in.read();
+                            DataArray[index] = input;
+                            System.out.print(getIntToString(DataArray[index]));
+
+                        }
+                        index++;
                     }
-                    index++;
-                }
-
             }
             System.out.println("");
             System.out.println("Printing Arrays");
@@ -61,8 +63,16 @@ class decoder
         catch(Exception e)
         {
             System.err.println("Error : " + e);
+            e.printStackTrace();
         }
 
+    }
+
+    private static void Reset()
+    {
+        IDArray = new int[20];
+        DataArray = new int[20];
+        index = 1;
     }
     private static void dumpArrays(int [] array,boolean ID) throws UnsupportedEncodingException {
         for(int x =1; x <array.length; x++ )
