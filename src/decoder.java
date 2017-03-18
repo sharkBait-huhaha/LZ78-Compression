@@ -3,9 +3,7 @@
 //http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -14,47 +12,68 @@ class decoder
     protected static int index =1;
 
     protected static List<Integer> Data = new ArrayList<Integer>();
-    
+    protected static List<Integer> ID = new ArrayList<Integer>();
+
     public static void main(String []args)
     {
         System.err.println();
         System.err.println("-- Decoder Started --");
         int input;
-
+        int inputInINT;
+        int data;
+        String temp;
         //Get Standard Input
         try
         {
+            List<Integer> lineList = new ArrayList<Integer>();
             Data.add(0);
+            ID.add(0);
             System.err.println("");
             System.err.println("--  INPUT  --");
-            //Store Nothing in 0 index of arrays
+
+            //Going through file
             while((input =System.in.read()) != -1)
             {
-                int inputInINT = getIntFromAxcii(input);
-                if (inputInINT != 100001) {
-                    if (Data.get(inputInINT) == 0) {
+                //Reads the whole line , 13 indicates line is going to end
+                while(input != 13)
+                {
+                    //adding chars to list
+                    lineList.add(input);
+                    input = System.in.read();
+                }
+                //Getting the last element of list
+                data = lineList.get(lineList.size()-1);
 
-                        input = System.in.read();
-                        Data.add(input);
-
-                        System.out.print(getIntToString(Data.get(index)));
-
-                    } else {
-                        System.out.print(getIntToString(Data.get(inputInINT)));
-
-                        input = System.in.read();
-                        Data.add(input);
-
-                        System.out.print(getIntToString(Data.get(index)));
-
-                    }
-                    index++;
+                lineList.remove(lineList.size()-1);
+                //hopefully adding "" to these doesnt corrupt data
+                temp ="";
+                //putting all chars together to get index
+                for(int x= 0; x < lineList.size(); x++)
+                {
+                    temp = temp + getIntToString(lineList.get(x));
                 }
 
-            }
-            System.out.println("");
-            System.out.println("Printing Arrays");
+                inputInINT = Integer.parseInt(temp);
+                ID.add(inputInINT);
+                Data.add(data);
+                temp ="";
 
+                //go up tree and print data
+                while(inputInINT != 0)
+                {
+                    temp =  getIntToString(Data.get(inputInINT)) + temp ;
+                    inputInINT = ID.get(inputInINT);
+                }
+
+                System.out.print(temp);
+                System.out.print(getIntToString(Data.get(index)));
+                index++;
+
+                //Should return 10
+                 input = System.in.read();
+                //Clearing list for new line
+                lineList.clear();
+            }
         }
         catch(Exception e)
         {
@@ -68,6 +87,10 @@ class decoder
     {
         Data.clear();
         Data.add(0);
+
+        ID.clear();
+        ID.add(0);
+
         index = 1;
     }
     private static int getIntFromAxcii(int n)
@@ -87,33 +110,15 @@ class decoder
             return 1000001;
         }
     }
-    private static String getIntToString(int n) throws UnsupportedEncodingException {
-        byte nn = (byte) n;
-        String byteToString = new String(new byte[]{nn},"us-ascii");
-        return byteToString;
-    }
-    private static void ExtractInput(String inputFile) throws IOException {
-        FileInputStream in  = new FileInputStream(inputFile);
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String line;
-
-        boolean EndofFile = false;
-        System.err.println("Extracting data from input..");
-        while(!EndofFile)
-        {
-            line = br.readLine();
-            if(line != null)
-            {
-                System.err.println(line);
-            }
-            else
-            {
-                EndofFile = true;
-            }
-
+    private static String getIntToString(int n)  {
+        try {
+            byte nn = (byte) n;
+            String byteToString = new String(new byte[]{nn}, "us-ascii");
+            return byteToString;
         }
-        System.err.println("Data Extracted !!");
+        catch ( UnsupportedEncodingException e)
+        {
+            return "Fail";
+        }
     }
-
-
 }
