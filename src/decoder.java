@@ -41,6 +41,26 @@ class decoder
                     lineList.add(input);
                     input = System.in.read();
                 }
+
+                if(NeedReset(lineList))
+                {
+                   // System.out.print("NEEDS RESET");
+                    reset();
+                    lineList.clear();
+
+                    input =System.in.read();
+                    input = System.in.read();
+
+                    while(input != 13)
+                    {
+                        //adding chars to list
+                        lineList.add(input);
+                        input = System.in.read();
+                    }
+                }
+
+
+
                 //Getting the last element of list
                 data = lineList.get(lineList.size()-1);
 
@@ -52,7 +72,7 @@ class decoder
                 {
                     temp = temp + getIntToString(lineList.get(x));
                 }
-
+                //System.out.println("TEMP : " + temp);
                 inputInINT = Integer.parseInt(temp);
                 ID.add(inputInINT);
                 Data.add(data);
@@ -83,7 +103,31 @@ class decoder
 
     }
 
-    private static void Reset()
+    private static Boolean NeedReset(List<Integer> line)
+    {
+        Boolean result = false;
+        List<String> lineInString = new ArrayList<String>();
+
+        for(int x = 0; x< line.size(); x++)
+        {
+            lineInString.add(getIntToString(line.get(x)));
+        }
+
+        String temp ="";
+        Integer tempint= 0;
+        //putting all chars together to get index
+        for(int x= 0; x < line.size(); x++)
+        {
+            temp = temp + getIntToString(line.get(x));
+        }
+        if(temp.equals("\u001B"))
+        {
+            result = true;
+        }
+
+        return result;
+    }
+    private static void reset()
     {
         Data.clear();
         Data.add(0);
@@ -115,6 +159,10 @@ class decoder
             byte nn = (byte) n;
             String byteToString = new String(new byte[]{nn}, "us-ascii");
             return byteToString;
+        }
+        catch (NumberFormatException x)
+        {
+            return "FAIL e";
         }
         catch ( UnsupportedEncodingException e)
         {

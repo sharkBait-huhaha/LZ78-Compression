@@ -5,6 +5,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/decoder.class" afterPath="$PROJECT_DIR$/src/decoder.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/decoder.java" afterPath="$PROJECT_DIR$/src/decoder.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/encoder_out.txt" afterPath="$PROJECT_DIR$/src/encoder_out.txt" />
     </list>
     <ignored path="decoder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,12 +32,13 @@
           <file leaf-file-name="decoder.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/decoder.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="463">
-                  <caret line="66" column="97" selection-start-line="66" selection-start-column="97" selection-end-line="66" selection-end-column="97" />
+                <state relative-caret-position="391">
+                  <caret line="74" column="18" selection-start-line="74" selection-start-column="18" selection-end-line="74" selection-end-column="18" />
                   <folding>
-                    <element signature="e#0#3521#0" expanded="true" />
-                    <element signature="method#getIntFromAxcii#0;class#decoder#0" expanded="false" />
-                    <element signature="method#ExtractInput#0;class#decoder#0" expanded="false" />
+                    <element signature="e#0#4746#0" expanded="true" />
+                    <element signature="imports" expanded="true" />
+                    <element signature="e#699#708#0" expanded="true" />
+                    <element signature="e#3255#3263#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -57,12 +59,12 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="encoder.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/../Github/COMP317-17A_AssignmentOne_LZ78-Compression/encoder.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="170">
-                  <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
+                <state relative-caret-position="310">
+                  <caret line="27" column="61" selection-start-line="27" selection-start-column="61" selection-end-line="27" selection-end-column="61" />
                   <folding>
                     <element signature="e#0#1987#0" expanded="true" />
                   </folding>
@@ -96,10 +98,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="54" />
+    <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1874" />
-    <option name="height" value="1092" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -112,7 +114,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -125,14 +127,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane />
-      </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="aspect.path.notification.shown" value="true" />
@@ -590,15 +585,16 @@
       <option name="presentableId" value="Default" />
       <updated>1489244341056</updated>
       <workItem from="1489244343351" duration="7776000" />
-      <workItem from="1489724395859" duration="4925000" />
+      <workItem from="1489724395859" duration="16721000" />
+      <workItem from="1489885650337" duration="7158000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12701000" />
+    <option name="totallyTimeSpent" value="31655000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="54" y="-8" width="1874" height="1092" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -647,12 +643,36 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/decoder.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#4746#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#699#708#0" expanded="true" />
+            <element signature="e#3255#3263#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Github/COMP317-17A_AssignmentOne_LZ78-Compression/encoder.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#3521#0" expanded="true" />
-            <element signature="method#getIntFromAxcii#0;class#decoder#0" expanded="false" />
-            <element signature="method#ExtractInput#0;class#decoder#0" expanded="false" />
+            <element signature="e#0#1987#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/decoder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#4746#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#699#708#0" expanded="true" />
+            <element signature="e#3255#3263#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -670,12 +690,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/decoder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="66" column="97" selection-start-line="66" selection-start-column="97" selection-end-line="66" selection-end-column="97" />
+        <state relative-caret-position="391">
+          <caret line="74" column="18" selection-start-line="74" selection-start-column="18" selection-end-line="74" selection-end-column="18" />
           <folding>
-            <element signature="e#0#3521#0" expanded="true" />
-            <element signature="method#getIntFromAxcii#0;class#decoder#0" expanded="false" />
-            <element signature="method#ExtractInput#0;class#decoder#0" expanded="false" />
+            <element signature="e#0#4746#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#699#708#0" expanded="true" />
+            <element signature="e#3255#3263#0" expanded="true" />
           </folding>
         </state>
       </provider>
