@@ -29,32 +29,29 @@ class decoder
             List<Byte> lineList = new ArrayList<Byte>();
             Data.add((byte)0);
             ID.add((byte)0);
-            System.err.println("");
-            System.err.println("--  INPUT  --");
+         //   System.err.println("");
+         //   System.err.println("--  INPUT  --");
             boolean Enter;
-            boolean Reset;
-
 
             //Going through file
             while((input = (byte) System.in.read()) != -1)
             {
                 Enter = false;
-                Reset = false;
 
-                System.err.println("");
-                System.err.println("Reading Line : " + index);
+            //    System.err.println("");
+            //    System.err.println("Reading Line : " + index);
 
 
                 if(input == 27)
                 {
-                    System.err.println("ESCAPE Symbol found! Reseting !!");
+                //    System.err.println("ESCAPE Symbol found! Reseting !!");
                     reset();
                     input = (byte) System.in.read();
                     input = (byte) System.in.read();
                     input = (byte) System.in.read();
                     if(input == -1)
                     {
-                        System.err.println("END OF FILE ??");
+                //        System.err.println("END OF FILE ??");
                         break;
                     }
                 }
@@ -64,13 +61,14 @@ class decoder
                 while(input != 13)
                 {
                     lineList.add(input);
-                    System.err.print(input);
+                //    System.err.print(input);
                     input = (byte) System.in.read();
                 }
-                System.err.println("Chars Read in Line: " + lineList.size());
+            //    System.err.println();
+            //    System.err.println("Chars Read in Line: " + lineList.size());
 
                 input = (byte) System.in.read();
-                System.err.println("Should be 10 :" + input);
+            //    System.err.println("Should be 10 :" + input);
 
                 if(input == 13)
                 {
@@ -96,12 +94,12 @@ class decoder
                 }
                 if (lineList.size() == 0)
                 {
-                    System.err.println("Amount of Lines Read : " + index);
-                    System.err.println("No data found on line");
+            //        System.err.println("Amount of Lines Read : " + index);
+            //        System.err.println("No data found on line");
                     break;
                 }
 
-                System.err.println("Turning Index into Int : " + temp );
+            //    System.err.println("Turning Index into Int : " + temp );
                 inputInINT = Integer.parseInt(temp);
 
                 ID.add((byte)inputInINT);
@@ -109,21 +107,51 @@ class decoder
 
                 temp ="";
 
+                List<Byte> lineListToAdd = new ArrayList<Byte>();
                 //go up tree and print data
                 while(inputInINT != 0)
                 {
+                    Boolean ADDENTER = false;
 
-                    temp =  getIntToString(Data.get(inputInINT)) + temp ;
+                    byte DataInByte =Data.get(inputInINT);
+                    String DataInString = getIntToString(Data.get(inputInINT));
+
+                    if(DataInByte == 13)
+                    {
+                        ADDENTER = true;
+            //            System.err.println("ENTER DETECTED");
+
+                        byte n = 10;
+                        String Ten = getIntToString(n);
+                        //NOT ADDING THE 10 ATM
+                        temp =  getIntToString(Data.get(inputInINT)) + temp ;
+                    //    lineListToAdd.add(Data.get(inputInINT));
+                    }
+                    if(!ADDENTER)
+                    {
+                        temp =  getIntToString(Data.get(inputInINT)) + temp ;
+                        lineListToAdd.add(Data.get(inputInINT));
+                    }
                     inputInINT = ID.get(inputInINT);
 
                 }
 
+                /*
+                for(int x = 0; x< lineListToAdd.size(); x++)
+                {
+                    System.out.print(lineListToAdd.get(x));
+                }
+
+                System.out.print(Data.get(index));
+                */
+
                 System.out.print(temp);
+
                 System.out.print(getIntToString(Data.get(index)));
                 index++;
             }
-            System.err.println();
-            System.err.println("Amount of Lines Read : " + index);
+         //   System.err.println();
+         //   System.err.println("Amount of Lines Read : " + index);
 
         }
         catch(Exception e)
