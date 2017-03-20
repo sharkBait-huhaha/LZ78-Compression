@@ -11,89 +11,120 @@ class decoder
 {
     protected static int index =1;
 
-    protected static List<Integer> Data = new ArrayList<Integer>();
-    protected static List<Integer> ID = new ArrayList<Integer>();
+    protected static List<Byte> Data = new ArrayList<Byte>();
+    protected static List<Byte> ID = new ArrayList<Byte>();
 
     public static void main(String []args)
     {
         System.err.println();
         System.err.println("-- Decoder Started --");
-        int input;
+        byte input;
+
         int inputInINT;
-        int data;
+        byte data;
         String temp;
         //Get Standard Input
         try
         {
-            List<Integer> lineList = new ArrayList<Integer>();
-            Data.add(0);
-            ID.add(0);
+            List<Byte> lineList = new ArrayList<Byte>();
+            Data.add((byte)0);
+            ID.add((byte)0);
             System.err.println("");
             System.err.println("--  INPUT  --");
+            boolean Enter;
+            boolean Reset;
+
 
             //Going through file
-            while((input =System.in.read()) != -1)
+            while((input = (byte) System.in.read()) != -1)
             {
-                //Reads the whole line , 13 indicates line is going to end
-                while(input != 13)
-                {
-                    //adding chars to list
-                    lineList.add(input);
-                    input = System.in.read();
-                }
+                Enter = false;
+                Reset = false;
 
-                if(NeedReset(lineList))
+                System.err.println("");
+                System.err.println("Reading Line : " + index);
+
+
+                if(input == 27)
                 {
-                   // System.out.print("NEEDS RESET");
+                    System.err.println("ESCAPE Symbol found! Reseting !!");
                     reset();
-                    lineList.clear();
-
-                    input =System.in.read();
-                    input = System.in.read();
-
-                    while(input != 13)
+                    input = (byte) System.in.read();
+                    input = (byte) System.in.read();
+                    input = (byte) System.in.read();
+                    if(input == -1)
                     {
-                        //adding chars to list
-                        lineList.add(input);
-                        input = System.in.read();
+                        System.err.println("END OF FILE ??");
+                        break;
                     }
                 }
 
+                lineList.clear();
 
+                while(input != 13)
+                {
+                    lineList.add(input);
+                    System.err.print(input);
+                    input = (byte) System.in.read();
+                }
+                System.err.println("Chars Read in Line: " + lineList.size());
 
-                //Getting the last element of list
-                data = lineList.get(lineList.size()-1);
+                input = (byte) System.in.read();
+                System.err.println("Should be 10 :" + input);
 
-                lineList.remove(lineList.size()-1);
-                //hopefully adding "" to these doesnt corrupt data
+                if(input == 13)
+                {
+                    input = (byte) System.in.read();
+                    Enter = true;
+                }
+
+                if(Enter)
+                {
+                    data = 13;
+                }
+                else
+                {
+                    data = lineList.get(lineList.size()-1);
+                    lineList.remove(lineList.size()-1);
+                }
+
                 temp ="";
-                //putting all chars together to get index
+
                 for(int x= 0; x < lineList.size(); x++)
                 {
-                    temp = temp + getIntToString(lineList.get(x));
+                    temp = temp + getIntFromAxcii(lineList.get(x));
                 }
-                //System.out.println("TEMP : " + temp);
+                if (lineList.size() == 0)
+                {
+                    System.err.println("Amount of Lines Read : " + index);
+                    System.err.println("No data found on line");
+                    break;
+                }
+
+                System.err.println("Turning Index into Int : " + temp );
                 inputInINT = Integer.parseInt(temp);
-                ID.add(inputInINT);
+
+                ID.add((byte)inputInINT);
                 Data.add(data);
+
                 temp ="";
 
                 //go up tree and print data
                 while(inputInINT != 0)
                 {
+
                     temp =  getIntToString(Data.get(inputInINT)) + temp ;
                     inputInINT = ID.get(inputInINT);
+
                 }
 
                 System.out.print(temp);
                 System.out.print(getIntToString(Data.get(index)));
                 index++;
-
-                //Should return 10
-                 input = System.in.read();
-                //Clearing list for new line
-                lineList.clear();
             }
+            System.err.println();
+            System.err.println("Amount of Lines Read : " + index);
+
         }
         catch(Exception e)
         {
@@ -103,7 +134,7 @@ class decoder
 
     }
 
-    private static Boolean NeedReset(List<Integer> line)
+    private static Boolean NeedReset(List<Byte> line)
     {
         Boolean result = false;
         List<String> lineInString = new ArrayList<String>();
@@ -128,12 +159,12 @@ class decoder
         return result;
     }
     private static void reset()
-    {
+   {
         Data.clear();
-        Data.add(0);
+        Data.add((byte)0);
 
         ID.clear();
-        ID.add(0);
+        ID.add((byte)0);
 
         index = 1;
     }
@@ -141,13 +172,16 @@ class decoder
     {
         try
         {
+            //e.g 48
             byte nn = (byte) n;
             String byteToString = new String(new byte[]{nn},"us-ascii");
             int x = Integer.parseInt(byteToString);
+            //e.g 1
             return x;
         }
         catch (NumberFormatException e)
         {
+            System.err.println("WRONG INPUT !!!!!!!");
             return 100001;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
