@@ -2,6 +2,7 @@
 //Amarjot Parmar
 //http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ class decoder
 
     protected static List<Byte> Data = new ArrayList<Byte>();
     protected static List<Byte> ID = new ArrayList<Byte>();
+    protected static  ByteArrayOutputStream stream;
 
     public static void main(String []args)
     {
@@ -26,11 +28,10 @@ class decoder
         //Get Standard Input
         try
         {
+            FileOutputStream file = new FileOutputStream("decoder_out.txt");
             List<Byte> lineList = new ArrayList<Byte>();
             Data.add((byte)0);
             ID.add((byte)0);
-         //   System.err.println("");
-         //   System.err.println("--  INPUT  --");
             boolean Enter;
 
             //Going through file
@@ -38,38 +39,31 @@ class decoder
             {
                 Enter = false;
 
-            //    System.err.println("");
-            //    System.err.println("Reading Line : " + index);
-
-
+                //ESCAPE Symbol encountered
                 if(input == 27)
                 {
-                //    System.err.println("ESCAPE Symbol found! Reseting !!");
                     reset();
+                    //skipping line (default 13 10 which occres after every line)
                     input = (byte) System.in.read();
                     input = (byte) System.in.read();
+                    //New byte in new line
                     input = (byte) System.in.read();
                     if(input == -1)
                     {
-                //        System.err.println("END OF FILE ??");
                         break;
                     }
                 }
-
+                //Since new line
                 lineList.clear();
-
+                //storing all bytes
                 while(input != 13)
                 {
                     lineList.add(input);
-                //    System.err.print(input);
                     input = (byte) System.in.read();
                 }
-            //    System.err.println();
-            //    System.err.println("Chars Read in Line: " + lineList.size());
 
+                // Checking if 13 is also part of data
                 input = (byte) System.in.read();
-            //    System.err.println("Should be 10 :" + input);
-
                 if(input == 13)
                 {
                     input = (byte) System.in.read();
@@ -82,77 +76,45 @@ class decoder
                 }
                 else
                 {
+                    //Extratcing mismatch & removing it
                     data = lineList.get(lineList.size()-1);
                     lineList.remove(lineList.size()-1);
                 }
 
-                temp ="";
 
+                //Putting phrase number together
+                temp ="";
                 for(int x= 0; x < lineList.size(); x++)
                 {
                     temp = temp + getIntFromAxcii(lineList.get(x));
                 }
-                if (lineList.size() == 0)
-                {
-            //        System.err.println("Amount of Lines Read : " + index);
-            //        System.err.println("No data found on line");
-                    break;
-                }
 
-            //    System.err.println("Turning Index into Int : " + temp );
                 inputInINT = Integer.parseInt(temp);
 
                 ID.add((byte)inputInINT);
                 Data.add(data);
 
-                temp ="";
 
+                //go up tree and storing data in this list to print
                 List<Byte> lineListToAdd = new ArrayList<Byte>();
-                //go up tree and print data
                 while(inputInINT != 0)
                 {
-                    Boolean ADDENTER = false;
-
-                    byte DataInByte =Data.get(inputInINT);
-                    String DataInString = getIntToString(Data.get(inputInINT));
-
-                    if(DataInByte == 13)
-                    {
-                        ADDENTER = true;
-            //            System.err.println("ENTER DETECTED");
-
-                        byte n = 10;
-                        String Ten = getIntToString(n);
-                        //NOT ADDING THE 10 ATM
-                        temp =  getIntToString(Data.get(inputInINT)) + temp ;
-                    //    lineListToAdd.add(Data.get(inputInINT));
-                    }
-                    if(!ADDENTER)
-                    {
-                        temp =  getIntToString(Data.get(inputInINT)) + temp ;
-                        lineListToAdd.add(Data.get(inputInINT));
-                    }
+                    lineListToAdd.add(Data.get(inputInINT));
                     inputInINT = ID.get(inputInINT);
-
                 }
+                //Stream that will be used to ouput data
+                 stream = new ByteArrayOutputStream();
 
-                /*
-                for(int x = 0; x< lineListToAdd.size(); x++)
+                for(int x = lineListToAdd.size(); x> 0; x--)
                 {
-                    System.out.print(lineListToAdd.get(x));
+                    System.out.print(lineListToAdd.get(x-1));
+                    stream.write(lineListToAdd.get(x-1));
                 }
+                stream.write(Data.get(index));
+                stream.writeTo(file);
 
-                System.out.print(Data.get(index));
-                */
-
-                System.out.print(temp);
-
-                System.out.print(getIntToString(Data.get(index)));
                 index++;
             }
-         //   System.err.println();
-         //   System.err.println("Amount of Lines Read : " + index);
-
         }
         catch(Exception e)
         {
@@ -161,7 +123,7 @@ class decoder
         }
 
     }
-
+    //Takes a byte array and determines if its a reset symbol
     private static Boolean NeedReset(List<Byte> line)
     {
         Boolean result = false;
@@ -186,8 +148,9 @@ class decoder
 
         return result;
     }
+
     private static void reset()
-   {
+    {
         Data.clear();
         Data.add((byte)0);
 
@@ -196,7 +159,8 @@ class decoder
 
         index = 1;
     }
-    private static int getIntFromAxcii(int n)
+
+    private static int getIntFromAxcii(byte n)
     {
         try
         {
@@ -209,13 +173,14 @@ class decoder
         }
         catch (NumberFormatException e)
         {
-            System.err.println("WRONG INPUT !!!!!!!");
+            System.err.println("Error : " + e);
             return 100001;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return 1000001;
         }
     }
+
     private static String getIntToString(int n)  {
         try {
             byte nn = (byte) n;
@@ -224,11 +189,11 @@ class decoder
         }
         catch (NumberFormatException x)
         {
-            return "FAIL e";
+            return "Error : " + x;
         }
         catch ( UnsupportedEncodingException e)
         {
-            return "Fail";
+            return "Error : " + e;
         }
     }
 }
