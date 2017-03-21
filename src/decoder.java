@@ -3,6 +3,7 @@
 //http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ class decoder
     protected static int index =1;
 
     protected static List<Byte> Data = new ArrayList<Byte>();
-    protected static List<Byte> ID = new ArrayList<Byte>();
+    protected static List<Integer> ID = new ArrayList<Integer>();
     protected static  ByteArrayOutputStream stream;
 
     public static void main(String []args)
@@ -31,12 +32,13 @@ class decoder
             FileOutputStream file = new FileOutputStream("decoder_out.txt");
             List<Byte> lineList = new ArrayList<Byte>();
             Data.add((byte)0);
-            ID.add((byte)0);
+            ID.add(0);
             boolean Enter;
 
             //Going through file
             while((input = (byte) System.in.read()) != -1)
             {
+
                 Enter = false;
 
                 //ESCAPE Symbol encountered
@@ -58,6 +60,7 @@ class decoder
                 //storing all bytes
                 while(input != 13)
                 {
+                 //   System.err.print(getIntToString(input) + " INPUT IN BYTES : " + input +" ");
                     lineList.add(input);
                     input = (byte) System.in.read();
                 }
@@ -86,12 +89,14 @@ class decoder
                 temp ="";
                 for(int x= 0; x < lineList.size(); x++)
                 {
-                    temp = temp + getIntFromAxcii(lineList.get(x));
+                    temp = temp + getIntToString(lineList.get(x));
+
                 }
+               // System.out.println(temp + " LINE SIZE " + lineList.size());
 
-                inputInINT = Integer.parseInt(temp);
 
-                ID.add((byte)inputInINT);
+                inputInINT = ConvertBytoToIntString(temp);
+                ID.add(inputInINT);
                 Data.add(data);
 
 
@@ -102,12 +107,15 @@ class decoder
                     lineListToAdd.add(Data.get(inputInINT));
                     inputInINT = ID.get(inputInINT);
                 }
+
+
+
                 //Stream that will be used to ouput data
                  stream = new ByteArrayOutputStream();
 
                 for(int x = lineListToAdd.size(); x> 0; x--)
                 {
-                    System.out.print(lineListToAdd.get(x-1));
+                   // System.out.print(lineListToAdd.get(x-1));
                     stream.write(lineListToAdd.get(x-1));
                 }
                 stream.write(Data.get(index));
@@ -155,7 +163,7 @@ class decoder
         Data.add((byte)0);
 
         ID.clear();
-        ID.add((byte)0);
+        ID.add(0);
 
         index = 1;
     }
@@ -181,10 +189,11 @@ class decoder
         }
     }
 
-    private static String getIntToString(int n)  {
+    private static String getIntToString(byte n)  {
         try {
             byte nn = (byte) n;
             String byteToString = new String(new byte[]{nn}, "us-ascii");
+         // System.err.println("Byte : " + n + " Calculated Value : " + byteToString);
             return byteToString;
         }
         catch (NumberFormatException x)
@@ -194,6 +203,18 @@ class decoder
         catch ( UnsupportedEncodingException e)
         {
             return "Error : " + e;
+        }
+    }
+    private static int ConvertBytoToIntString(String x)
+    {
+        try {
+            int inputInINT = Integer.parseInt(x);
+            return inputInINT;
+        }
+        catch(NumberFormatException e)
+        {
+            System.out.println("COULD NOT CONVERT int");
+            return 100001;
         }
     }
 }
