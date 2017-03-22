@@ -22,13 +22,15 @@ class decoder
         System.err.println();
         System.err.println("-- Decoder Started --");
         byte input;
-
         int inputInINT;
         byte data;
         String temp;
         //Get Standard Input
         try
         {
+            String lol =  "\u0000";
+
+            System.out.println("NULL : " + lol);
             FileOutputStream file = new FileOutputStream("decoder_out.txt");
             List<Byte> lineList = new ArrayList<Byte>();
             Data.add((byte)0);
@@ -55,12 +57,12 @@ class decoder
                         break;
                     }
                 }
+
                 //Since new line
                 lineList.clear();
                 //storing all bytes
                 while(input != 13)
                 {
-                 //   System.err.print(getIntToString(input) + " INPUT IN BYTES : " + input +" ");
                     lineList.add(input);
                     input = (byte) System.in.read();
                 }
@@ -79,8 +81,11 @@ class decoder
                 }
                 else
                 {
+                    System.out.print("Size of Line : " + lineList.size());
+                    System.err.println(" (" + lineList.get(lineList.size()-1) + " )");
                     //Extratcing mismatch & removing it
                     data = lineList.get(lineList.size()-1);
+                    System.out.println(data);
                     lineList.remove(lineList.size()-1);
                 }
 
@@ -92,13 +97,14 @@ class decoder
                     temp = temp + getIntToString(lineList.get(x));
 
                 }
-               // System.out.println(temp + " LINE SIZE " + lineList.size());
-
 
                 inputInINT = ConvertBytoToIntString(temp);
                 ID.add(inputInINT);
-                Data.add(data);
+                List<Byte> line = new ArrayList<Byte>();
+                line.add(data);
 
+
+                Data.add(data);
 
                 //go up tree and storing data in this list to print
                 List<Byte> lineListToAdd = new ArrayList<Byte>();
@@ -108,21 +114,18 @@ class decoder
                     inputInINT = ID.get(inputInINT);
                 }
 
-
-
                 //Stream that will be used to ouput data
                  stream = new ByteArrayOutputStream();
 
                 for(int x = lineListToAdd.size(); x> 0; x--)
                 {
-                   // System.out.print(lineListToAdd.get(x-1));
                     stream.write(lineListToAdd.get(x-1));
                 }
                 stream.write(Data.get(index));
                 stream.writeTo(file);
-
                 index++;
             }
+            System.out.println("DATA SIZE : "+Data.size() + " ID SIZE :" +ID.size());
         }
         catch(Exception e)
         {
@@ -131,31 +134,8 @@ class decoder
         }
 
     }
-    //Takes a byte array and determines if its a reset symbol
-    private static Boolean NeedReset(List<Byte> line)
-    {
-        Boolean result = false;
-        List<String> lineInString = new ArrayList<String>();
 
-        for(int x = 0; x< line.size(); x++)
-        {
-            lineInString.add(getIntToString(line.get(x)));
-        }
 
-        String temp ="";
-        Integer tempint= 0;
-        //putting all chars together to get index
-        for(int x= 0; x < line.size(); x++)
-        {
-            temp = temp + getIntToString(line.get(x));
-        }
-        if(temp.equals("\u001B"))
-        {
-            result = true;
-        }
-
-        return result;
-    }
 
     private static void reset()
     {
@@ -193,7 +173,6 @@ class decoder
         try {
             byte nn = (byte) n;
             String byteToString = new String(new byte[]{nn}, "us-ascii");
-         // System.err.println("Byte : " + n + " Calculated Value : " + byteToString);
             return byteToString;
         }
         catch (NumberFormatException x)

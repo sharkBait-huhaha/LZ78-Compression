@@ -33,8 +33,9 @@ class Encoder{
 		    pair=new String[0];
 		}
             }
-	    for(String str: pair)
-	    	System.out.println(str);
+	    if(pair.length>0)
+	    	System.out.print(pair[0]);
+	    System.out.print("\u0000");
 	}catch(IOException e){
 	    System.err.println("Usage: java Encoder <Dictionary Size(bits)>");
 	}catch(Exception e){
