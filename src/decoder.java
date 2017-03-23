@@ -15,122 +15,150 @@ class decoder
 
     protected static List<Byte> Data = new ArrayList<Byte>();
     protected static List<Integer> ID = new ArrayList<Integer>();
-    protected static  ByteArrayOutputStream stream;
+    protected static  ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
 
     public static void main(String []args)
     {
+
         System.err.println();
         System.err.println("-- Decoder Started --");
+
         byte input;
         int inputInINT;
         byte data;
         String temp;
+
         //Get Standard Input
         try
         {
-            String lol =  "\u0000";
-
-            System.out.println("NULL : " + lol);
             FileOutputStream file = new FileOutputStream("decoder_out.txt");
             List<Byte> lineList = new ArrayList<Byte>();
+
             Data.add((byte)0);
             ID.add(0);
-            boolean Enter;
+
+            boolean Enter =false;
 
             //Going through file
             while((input = (byte) System.in.read()) != -1)
             {
-
-                Enter = false;
-
+                System.out.print(input);
                 //ESCAPE Symbol encountered
                 if(input == 27)
                 {
                     reset();
-                    //skipping line (default 13 10 which occres after every line)
-                    input = (byte) System.in.read();
-                    input = (byte) System.in.read();
-                    //New byte in new line
-                    input = (byte) System.in.read();
-                    if(input == -1)
-                    {
-                        break;
-                    }
+                    continue;
                 }
-
-                //Since new line
-                lineList.clear();
-                //storing all bytes
-                while(input != 13)
+                //First 10
+                if(input == 10 && !Enter)
+                {
+                    Enter = true;
+                    lineList.add(input);
+                }
+                //Secound 10
+                else if(input == 10 && Enter)
                 {
                     lineList.add(input);
-                    input = (byte) System.in.read();
+                    processline(lineList, file);
+                    lineList.clear();
+                    Enter = false;
                 }
-
-                // Checking if 13 is also part of data
-                input = (byte) System.in.read();
-                if(input == 13)
+                //No Second 10
+                else if(Enter)
                 {
-                    input = (byte) System.in.read();
-                    Enter = true;
-                }
 
-                if(Enter)
-                {
-                    data = 13;
+                    //lineList.remove(lineList.size()-1);
+                    processline(lineList, file);
+                    lineList.clear();
+                    lineList.add(input);
+                    Enter = false;
                 }
                 else
                 {
-                    System.out.print("Size of Line : " + lineList.size());
-                    System.err.println(" (" + lineList.get(lineList.size()-1) + " )");
-                    //Extratcing mismatch & removing it
-                    data = lineList.get(lineList.size()-1);
-                    System.out.println(data);
-                    lineList.remove(lineList.size()-1);
-                }
-
-
-                //Putting phrase number together
-                temp ="";
-                for(int x= 0; x < lineList.size(); x++)
-                {
-                    temp = temp + getIntToString(lineList.get(x));
+                    lineList.add(input);
+                    Enter = false;
 
                 }
 
-                inputInINT = ConvertBytoToIntString(temp);
-                ID.add(inputInINT);
-                List<Byte> line = new ArrayList<Byte>();
-                line.add(data);
-
-
-                Data.add(data);
-
-                //go up tree and storing data in this list to print
-                List<Byte> lineListToAdd = new ArrayList<Byte>();
-                while(inputInINT != 0)
-                {
-                    lineListToAdd.add(Data.get(inputInINT));
-                    inputInINT = ID.get(inputInINT);
-                }
-
-                //Stream that will be used to ouput data
-                 stream = new ByteArrayOutputStream();
-
-                for(int x = lineListToAdd.size(); x> 0; x--)
-                {
-                    stream.write(lineListToAdd.get(x-1));
-                }
-                stream.write(Data.get(index));
-                stream.writeTo(file);
-                index++;
             }
-            System.out.println("DATA SIZE : "+Data.size() + " ID SIZE :" +ID.size());
+            System.out.println();
+            System.out.println(Data.size());
+
         }
         catch(Exception e)
         {
             System.err.println("Error : " + e);
             e.printStackTrace();
+        }
+
+    }
+
+    private static void processline(List<Byte> line, FileOutputStream file)
+    {
+        if(line.size() >= 2)
+        {
+            line.remove(line.size() -1);
+            Data.add(line.get(line.size()-1));
+            line.remove(line.size()-1);
+
+            //System.out.println("DATA : " + Data.get(index) + " ID : " + line.get(0));
+
+            int PhraseNumber = getID(line);
+            ID.add(PhraseNumber);
+
+            printtoFile(PhraseNumber, file);
+            stream.write(Data.get(index));
+            try {
+                stream.writeTo(file);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        else
+        {
+            System.out.println("!@!@!@!" + line.get(0));
+        }
+
+        index++;
+    }
+    private static int getID(List<Byte> line)
+    {
+        int ID = 0;
+        //Putting phrase number together
+        String temp ="";
+        for(int x= 0; x < line.size(); x++)
+        {
+            temp = temp + getIntToString(line.get(x));
+
+        }
+
+        ID = ConvertByteToIntString(temp);
+
+        return ID;
+    }
+    private static void justprinttofile(FileOutputStream file, byte b)
+    {
+        stream.write(b);
+    }
+    private static void printtoFile(int Id, FileOutputStream file)
+    {
+        //go up tree and storing data in this list to print
+        List<Byte> lineListToAdd = new ArrayList<Byte>();
+        while(Id != 0)
+        {
+            lineListToAdd.add(Data.get(Id));
+            Id = ID.get(Id);
+        }
+
+        //Stream that will be used to ouput data
+        stream = new ByteArrayOutputStream();
+
+        for(int x = lineListToAdd.size(); x> 0; x--)
+        {
+            stream.write(lineListToAdd.get(x-1));
         }
 
     }
@@ -184,7 +212,7 @@ class decoder
             return "Error : " + e;
         }
     }
-    private static int ConvertBytoToIntString(String x)
+    private static int ConvertByteToIntString(String x)
     {
         try {
             int inputInINT = Integer.parseInt(x);
