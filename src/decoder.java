@@ -48,61 +48,66 @@ class decoder
                 //ESCAPE Symbol encountered
                 if(input == 27)
                 {
+                    if(lineList.size() != 0)
+                    {
+                        processline(lineList, file);
+                    }
                     reset();
+                    lineList.clear();
+                    System.out.println("RESET DETECTED");
+                    //Reading the 10
+                    System.in.read();
+                    Enter = false;
                     continue;
-                }
-                //First 10
-                if(input == 10 && !Enter)
-                {
-                    Enter = true;
-                    lineList.add(input);
-		
-                }
-                //Secound 10
-                else if(input == 10 && Enter)
-                {
-                    lineList.add(input);
-                    processline(lineList, file);
-                    lineList.clear();
-                    Enter = false;
-		   
-                }
-                //No Second 10
-                else if(Enter)
-                {
-
-                    //lineList.remove(lineList.size()-1);
-                    processline(lineList, file);
-                    lineList.clear();
-                    lineList.add(input);
-                    Enter = false;
-		
                 }
                 else
                 {
-                    lineList.add(input);
-                    Enter = false;
-		   
+                    //First 10
+                    if (input == 10 && !Enter) {
+                        Enter = true;
+                        lineList.add(input);
+
+                    }
+                    //Secound 10
+                    else if (input == 10 && Enter) {
+                        lineList.add(input);
+
+                        processline(lineList, file);
+                        lineList.clear();
+                        Enter = false;
+
+                    }
+                    //No Second 10
+                    else if (Enter)
+                    {
+                        System.out.println("LineList Size: " + lineList.size());
+                        processline(lineList, file);
+                        lineList.clear();
+                        lineList.add(input);
+
+                        Enter = false;
+
+                    }
+                    else
+                    {
+                        lineList.add(input);
+                        Enter = false;
+
+                    }
                 }
 
+
             }
-		
-	//processline(lineList,file);	
-	    if(lineList.size() != 1)
+
+	    if(lineList.size() != 1 && lineList.size() != 0)
 		{
 			lineList.remove(lineList.size() -1);
-            		int PhraseNumber = getID(lineList);
-            		ID.add(PhraseNumber);
+            int PhraseNumber = getID(lineList);
+            ID.add(PhraseNumber);
 
-           		 printtoFile(PhraseNumber, file);
-           		 
-           	  stream.writeTo(file);
-           
-
+            printtoFile(PhraseNumber, file);
+            stream.writeTo(file);
 		}
-		
-
-
      
 	}
         catch(Exception e)
@@ -115,12 +120,12 @@ class decoder
 
     private static void processline(List<Byte> line, FileOutputStream file)
     {
-	line.remove(line.size() -1);
-     
+	       line.remove(line.size() -1);
+            //System.out.println("LINE SIZE :" +line.size());
             Data.add(line.get(line.size()-1));
             line.remove(line.size()-1);
 
-            System.out.println( " ID : " + line.get(0) + "  DATA : " + Data.get(index) );
+            //System.out.println( "INDEX : "+ index +" ID : " + line.get(0) + "  DATA : " + Data.get(index) );
 
             int PhraseNumber = getID(line);
             ID.add(PhraseNumber);
@@ -134,13 +139,11 @@ class decoder
             {
 
             }
-    
-	
         index++;
     }
     private static int getID(List<Byte> line)
     {
-        int ID = 0;
+        int PhraseNumber = 0;
         //Putting phrase number together
         String temp ="";
         for(int x= 0; x < line.size(); x++)
@@ -149,22 +152,22 @@ class decoder
 
         }
 
-        ID = ConvertByteToIntString(temp);
+        PhraseNumber = ConvertByteToIntString(temp);
 
-        return ID;
+        return PhraseNumber;
     }
     private static void justprinttofile(FileOutputStream file, byte b)
     {
         stream.write(b);
     }
-    private static void printtoFile(int Id, FileOutputStream file)
+    private static void printtoFile(int PhraseNumber, FileOutputStream file)
     {
         //go up tree and storing data in this list to print
         List<Byte> lineListToAdd = new ArrayList<Byte>();
-        while(Id != 0)
+        while(PhraseNumber != 0)
         {
-            lineListToAdd.add(Data.get(Id));
-            Id = ID.get(Id);
+            lineListToAdd.add(Data.get(PhraseNumber));
+            PhraseNumber = ID.get(PhraseNumber);
         }
 
         //Stream that will be used to ouput data
@@ -239,3 +242,4 @@ class decoder
         }
     }
 }
+
