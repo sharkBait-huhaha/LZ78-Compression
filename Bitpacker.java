@@ -28,7 +28,8 @@ class Bitpacker{
 	    }
 	    if(buf.size()>0)
 		buf.addLast((byte)0);
-		process(buf);
+	    process(buf);
+	    System.out.println();
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
@@ -40,7 +41,8 @@ class Bitpacker{
 	    int num=0;
 	    for(byte b:buf){
 		num*=10;
-		num+=Integer.parseInt(new String(new byte[] {b}));
+		if(b!=(byte)0)
+		    num+=Integer.parseInt(new String(new byte[] {b}));
 	    }
 	    pack(num, phraseLength);
 	    pack(data, 8);
@@ -63,7 +65,7 @@ class Bitpacker{
 	nextBit+=bits;
 	if(nextBit>=32){
 	    //print nextOut as binary
-	    System.out.println(Integer.toBinaryString(nextOut));
+	    System.out.print(String.format("%32s", Integer.toBinaryString(nextOut)).replace(" ", "0"));
 	    nextOut=leftovers<<32+shift;
 	    nextBit=-shift;
 	}
