@@ -3,12 +3,13 @@ import java.lang.*;
 import java.nio.ByteBuffer;
 
 class Bitpacker{
-    private static int nextOut=0, nextBit=0, phraseLength=1, lineNum=1;
+    private static int nextOut=0, nextBit=0, phraseLength=1, lineNum=0;
     public static void main(String[] args){
         LinkedList<Byte> buf = new LinkedList<Byte>();
 	byte c, temp;
-	try{
-	    buf.addLast((byte)System.in.read());
+	try
+	{
+		buf.addLast((byte)System.in.read());
 	    while((c=(byte)System.in.read())>-1){
 		//System.out.println("input: "+Integer.toBinaryString(c));
 		if(buf.getLast()==10){
@@ -29,7 +30,7 @@ class Bitpacker{
 	    if(buf.size()>0)
 		buf.addLast((byte)0);
 	    process(buf);
-	    System.out.println();
+	    System.out.print(String.format("%32s", Integer.toBinaryString(nextOut)).replace(" ", "0"));
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
@@ -54,13 +55,13 @@ class Bitpacker{
     private static void pack(int input, int bits){
 	int leftovers=0;
 	int shift=32-bits-nextBit;
-	if(shift<0)
-	    leftovers=(2^(-shift))&input;
-	input<<=shift;
-	/*System.out.println("bits: "+Integer.toString(bits));
-	System.out.println("nextBit: "+Integer.toString(nextBit));
-	System.out.println("shift: "+Integer.toString(shift));
-	System.out.println(Integer.toBinaryString(input));*/
+	if(shift<0){
+	    leftovers=(int)Math.pow(2,-shift)-1&input;
+	    //leftovers=(2^(-shift))&input;
+	    input>>>=-shift;
+	}else{
+	    input<<=shift;
+	}
 	nextOut|=input;
 	nextBit+=bits;
 	if(nextBit>=32){
