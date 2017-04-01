@@ -2,9 +2,9 @@
 //Amarjot Parmar
 //http://stackoverflow.com/questions/6974335/converting-us-ascii-encoded-byte-to-integer-and-back
 
-
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,9 +12,11 @@ import java.util.Scanner;
 class decoder
 {
     private static int index =1;
-    private static List<Character> Mismatch = new ArrayList<Character>();
+    private static List<Byte> Mismatch = new ArrayList<Byte>();
     private static List<Integer> phraseNumber = new ArrayList<Integer>();
-    
+    private static List<Byte> toPrint = new ArrayList<Byte>();
+    private static ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
     public static void main(String []args)
     {
         byte input;
@@ -50,7 +52,7 @@ class decoder
                     }
                     else
                     {
-                        List<Character> linetoPrint = new ArrayList<Character>();
+                        List<Byte> linetoPrint = new ArrayList<Byte>();
 
                         while(temp != 0)
                         {
@@ -59,13 +61,23 @@ class decoder
                         }
                         for(int x = linetoPrint.size(); x> 0; x--)
                         {
-                            System.out.write(linetoPrint.get(x-1));
+                            //System.out.write(linetoPrint.get(x-1));
+                            //stream.write(linetoPrint.get(x-1));
+                            toPrint.add(linetoPrint.get(x-1));
                         }
                     }
 
                 }
 
             }
+            byte [] bytearray = new byte[toPrint.size()];
+            for(int x = 0; x < toPrint.size(); x++)
+            {
+                bytearray[x] = toPrint.get(x);
+            }
+            System.out.write(bytearray);
+
+            //stream.writeTo(System.out);
 
 
         }
@@ -80,10 +92,10 @@ class decoder
     private static void cleanprocess(int phrasenumber, int data)
     {
         phraseNumber.add(phrasenumber);
-        Mismatch.add((char)data);
+        Mismatch.add((byte)data);
 
         int temp = phrasenumber;
-        List<Character> linetoPrint = new ArrayList<Character>();
+        List<Byte> linetoPrint = new ArrayList<Byte>();
 
         while(temp != 0)
         {
@@ -92,16 +104,20 @@ class decoder
         }
         for(int x = linetoPrint.size(); x> 0; x--)
         {
-            System.out.write(linetoPrint.get(x-1));
+            toPrint.add(linetoPrint.get(x-1));
+            //System.out.write(linetoPrint.get(x-1));
+            //stream.write(linetoPrint.get(x-1));
         }
-        System.out.write((byte)data);
+        toPrint.add((byte)data);
+       // stream.write((byte) data);
+        //System.out.write((byte)data);
     }
 
     //throws away all acquired phrases and continue as if starting from scratch
     private static void reset()
     {
         Mismatch.clear();
-        Mismatch.add((char)0);
+        Mismatch.add((byte)0);
         
         phraseNumber.clear();
         phraseNumber.add(0);
