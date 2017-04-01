@@ -3,56 +3,35 @@
 
 class bitunpacker
 {
-    private static int  MaxValue = 1;
     private static int currentMax = 1;
     private static int BitsThresh =1;
     private static String Line = "";
+    private static  boolean isphraseNumber = true;
     public static void main(String args [])
     {
-        boolean isphraseNumber = true;
-        int x = 0;
         int input;
         try
         {
             // READ 8 Bits
             while ((input = System.in.read()) != -1 )
             {
-
-                System.out.println("Before :  " + currentMax + " BITS THRESH : " + BitsThresh);
-                processMaxPossibleByte();
-
-
-                System.out.println("After  :  " + currentMax + " BITS THRESH : " + BitsThresh);
-                currentMax++;
-                System.out.println();
-              //  System.out.println("Max :  " + MaxPosPhraseNum + " Count: " + count);
-
-                /*
+                //Carefull toBinary seems to cut off zeros that are not needed e.g 000101 = 101
                 Line = Line + Integer.toBinaryString(input);
+                /*
                 if(processIfCan(isphraseNumber))
                 {
-                    count++;
-                    if(isphraseNumber)
-                    {
-                        isphraseNumber = false;
-                    }
-                    else
-                    {
-                        isphraseNumber = true;
-                    }
+                    currentMax++;
                 }
                 */
+
             }
+            System.out.println(Line);
         }
         catch (Exception e)
         {
             System.out.println("Error :" + e);
             e.printStackTrace();
         }
-        
-
-        
-    
     }
 
     private static boolean processIfCan(boolean isphraseNumber)
@@ -65,19 +44,43 @@ class bitunpacker
         {
             if(Line.length() >= BitsThresh)
             {
-               // String phrasenumber = Line.substring(0,MaxPosPhraseNum);
-              //  Line = Line.substring(MaxPosPhraseNum);
+                String phrasenumber = Line.substring(0,BitsThresh);
+                Line = Line.substring(BitsThresh);
+                print(phrasenumber,isphraseNumber);
+                isphraseNumber = false;
             }
-
-
+            success = true;
         }
         else
         {
-
+            if(Line.length() >= 8)
+            {
+                String mismatch = Line.substring(0,7);
+                Line = Line.substring(7);
+                print(mismatch, isphraseNumber);
+                isphraseNumber = true;
+            }
+            success = true;
         }
 
-
         return success;
+    }
+
+    private static void print(String line, boolean isphraseNumber)
+    {
+        //Turn 100110 into a number
+        int temp = 0;
+        temp = Integer.parseInt(line, 2);
+
+        if(isphraseNumber)
+        {
+            System.out.print(temp);
+            System.out.print(", ");
+        }
+        else
+        {
+            System.out.println(temp);
+        }
     }
 
     private static void processMaxPossibleByte()
@@ -87,71 +90,7 @@ class bitunpacker
         if(n < currentMax )
         {
             BitsThresh++;
-            //processMaxPossibleByte();
-        }
-
-    }
-
-    private static void unpack(String line, boolean isphraseNumber)
-    {
-        int temp = 0;
-        if(isphraseNumber)
-        {
-
-            System.out.print(temp +",");
-        }
-        else
-        {
-            System.out.println(temp);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
