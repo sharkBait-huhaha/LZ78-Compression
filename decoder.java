@@ -19,13 +19,14 @@ class decoder
 
     public static void main(String []args)
     {
-        byte input;
         Scanner scan = new Scanner(System.in);
 
         try
         {
             reset();
-            boolean Enter =false;
+
+            int phrasenumber;
+            int data;
 
             //Going through file
             while(scan.hasNext())
@@ -35,51 +36,42 @@ class decoder
 
                 if(ExtractedData.length == 2)
                 {
-                    System.err.println("ID : " + ExtractedData[0] + " Data : " + ExtractedData[1]);
-                    int phrasenumber = Integer.parseInt(ExtractedData[0]);
-                    int data = Integer.parseInt(ExtractedData[1]);
-                    cleanprocess(phrasenumber, data);
+                    phrasenumber = Integer.parseInt(ExtractedData[0]);
+                    data = Integer.parseInt(ExtractedData[1]);
+
+                    phraseNumber.add(phrasenumber);
+                    Mismatch.add((byte)data);
+
+                    cleanprocess(phrasenumber);
+
+                    toPrint.add((byte) data);
                 }
                 else
                 {
-                    System.err.print("LENGTH OF Extracted : "+ ExtractedData.length);
-                    ExtractedData = line.split(" ");
-                    System.err.print("LENGTH OF Extracted : "+ ExtractedData.length);
-                    int temp = Integer.parseInt(ExtractedData[0]);
-                    if(temp == 27)
+                    line = line + ", 0";
+                    ExtractedData = line.split(",");
+
+                    if(!ExtractedData[0].equals("\u001B"))
                     {
-                        reset();
+                        phrasenumber = Integer.parseInt(ExtractedData[0]);
+                        cleanprocess(phrasenumber);
                     }
                     else
                     {
-                        List<Byte> linetoPrint = new ArrayList<Byte>();
-
-                        while(temp != 0)
-                        {
-                            linetoPrint.add(Mismatch.get(temp));
-                            temp = phraseNumber.get(temp);
-                        }
-                        for(int x = linetoPrint.size(); x> 0; x--)
-                        {
-                            //System.out.write(linetoPrint.get(x-1));
-                            //stream.write(linetoPrint.get(x-1));
-                            toPrint.add(linetoPrint.get(x-1));
-                        }
+                        System.err.println("RESET");
+                        reset();
                     }
 
                 }
-
             }
+
+
             byte [] bytearray = new byte[toPrint.size()];
             for(int x = 0; x < toPrint.size(); x++)
             {
                 bytearray[x] = toPrint.get(x);
             }
             System.out.write(bytearray);
-
-            //stream.writeTo(System.out);
-
-
         }
         catch(Exception e)
         {
@@ -89,28 +81,22 @@ class decoder
 
     }
 
-    private static void cleanprocess(int phrasenumber, int data)
+    private static void cleanprocess(int p)
     {
-        phraseNumber.add(phrasenumber);
-        Mismatch.add((byte)data);
+        int temp = p;
 
-        int temp = phrasenumber;
         List<Byte> linetoPrint = new ArrayList<Byte>();
 
-        while(temp != 0)
+        while (temp != 0)
         {
             linetoPrint.add(Mismatch.get(temp));
             temp = phraseNumber.get(temp);
         }
-        for(int x = linetoPrint.size(); x> 0; x--)
+
+        for (int x = linetoPrint.size(); x > 0; x--)
         {
-            toPrint.add(linetoPrint.get(x-1));
-            //System.out.write(linetoPrint.get(x-1));
-            //stream.write(linetoPrint.get(x-1));
+            toPrint.add(linetoPrint.get(x - 1));
         }
-        toPrint.add((byte)data);
-       // stream.write((byte) data);
-        //System.out.write((byte)data);
     }
 
     //throws away all acquired phrases and continue as if starting from scratch
@@ -124,6 +110,5 @@ class decoder
 
         index = 1;
     }
-
 }
 
