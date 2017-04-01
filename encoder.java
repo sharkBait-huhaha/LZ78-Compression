@@ -27,7 +27,7 @@ class Encoder{
 					System.out.print(",");
 					System.out.println(pair[1]);
 					if(dropZeros(Integer.toBinaryString(trie.nextID)).length()>maxSize){
-						System.out.println("\u001B" +" " + "x");
+						System.out.println("\u001B");
 						trie.reset();
 					}
 					buf=new int[bufMax];
@@ -35,7 +35,7 @@ class Encoder{
 				}
 			}
 			if(pair.length>0) {
-				System.out.print(pair[0] +" " + pair[0]);
+				System.out.print(pair[0]);
 			}
 
 			//System.out.print("\u0000");
