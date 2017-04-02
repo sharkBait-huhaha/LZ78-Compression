@@ -1,8 +1,12 @@
+//Joseph Boyd    (1264974)
+//Amarjot Parmar (1255668)
+
 import java.util.*;
 import java.lang.*;
 import java.nio.ByteBuffer;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+
 
 class Bitpacker{
     private static BufferedOutputStream out = new BufferedOutputStream(System.out);
