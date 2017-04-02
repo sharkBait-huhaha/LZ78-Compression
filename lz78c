@@ -1,10 +1,8 @@
 #!/bin/bash
 
 BITS=16
-
 if [ -n "$2" ]
 then
     BITS=$2
-    echo "second argument recieved: $2"
 fi
 java Encoder $BITS <$1 | java Bitpacker >$1.lz78
