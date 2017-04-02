@@ -1,0 +1,8 @@
+#!/bin/bash
+
+x="/etc/apache2/apache2.conf"
+y=$(basename "$1")
+originalfname="${y%.*}"
+
+
+java bitunpacker < $1 | java decoder > $originalfname
