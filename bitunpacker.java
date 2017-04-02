@@ -35,30 +35,64 @@ class bitunpacker
         if(Line.length() >= (8 + BitsThresh))
         {
             processLine();
-            currentMax++;
-        }
 
+        }
     }
 
     private static void processLine()
     {
+        if(!isRST())
+        {
+            String phrasenumber = Line.substring(0, BitsThresh);
+            //System.err.println("Before Phrase Number Extraction  : " + Line);
+            Line = Line.substring(BitsThresh);
+            //System.err.println("After Phrase Number Extraction  : " + Line + " BitsThresh "+ BitsThresh  + "MaxValue" + currentMax);
+            print(phrasenumber, true);
 
 
-        String phrasenumber = Line.substring(0,BitsThresh);
-        System.err.println("Before Phrase Number Extraction  : " + Line);
-        Line = Line.substring(BitsThresh);
-        System.err.println("After Phrase Number Extraction  : " + Line + " BitsThresh "+ BitsThresh  + "MaxValue" + currentMax);
-        print(phrasenumber,true);
+            // System.err.println("Before Mismatch Extraction  : " + Line);
+            String mismatch = Line.substring(0, 8);
+            Line = Line.substring(8);
+            //  System.err.println("After Mismatch Extraction  : " + Line);
+            print(mismatch, false);
 
+            currentMax++;
+        }
+        else
+        {
+          reset();
+        }
 
-        System.err.println("Before Mismatch Extraction  : " + Line);
-        String mismatch = Line.substring(0,8);
-        Line = Line.substring(8);
-        System.err.println("After Mismatch Extraction  : " + Line);
-        print(mismatch, false);
     }
 
+    private static boolean isRST ()
+    {
+        String tempLine = Line;
+        tempLine = tempLine.substring(0, BitsThresh + 8);
+        String x = "";
 
+        for(int y =0; y < tempLine.length(); y ++)
+        {
+            x = x + "0";
+        }
+
+        if(tempLine.equals(x))
+        {
+            printRST();
+            Line = Line.substring(BitsThresh + 8);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private static void reset()
+    {
+        currentMax = 0;
+        BitsThresh = 1;
+        processMaxPossibleByte();
+    }
     private static void print(String line, boolean isphraseNumber)
     {
         //Turn 100110 into a number
@@ -77,7 +111,7 @@ class bitunpacker
     }
     private static void printRST()
     {
-        System.out.println("\u001B");
+        System.out.println("\u0000");
     }
 
     private static void processMaxPossibleByte()
