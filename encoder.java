@@ -1,10 +1,8 @@
-//import java.io.FileInputStream;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
 import java.io.*;
 import java.util.ArrayList;
 
 class Encoder{
+
 	public static void main(String[] args){
 		int bufMax=256;
 		int maxSize;
