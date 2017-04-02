@@ -1,8 +1,0 @@
-#!/bin/bash
-
-fullfilename="/etc/apache2/apache2.conf"
-filename=$(basename "$1")
-fname="${filename%.*}"
-
-
-java bitunpacker < $1 | java decoder > $fname
