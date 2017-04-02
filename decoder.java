@@ -51,7 +51,7 @@ class decoder
                     line = line + ", 0";
                     ExtractedData = line.split(",");
 
-                    if(!ExtractedData[0].equals("\u001B"))
+                    if(!ExtractedData[0].equals("\u0000"))
                     {
                         phrasenumber = Integer.parseInt(ExtractedData[0]);
                         cleanprocess(phrasenumber);
