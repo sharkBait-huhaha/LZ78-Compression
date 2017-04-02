@@ -39,10 +39,8 @@ class Bitpacker{
 		}else
 		    buf.addLast(c);
 	    }
-	    if(buf.size()>0){
-		buf.addLast(0);
+	    if(buf.size()>0)
 		process(buf);
-	    }
 	    //print the last few bytes in nextOut
 	    print(nextOut, (nextBit+8-1)/8);
 	}catch(Exception e){

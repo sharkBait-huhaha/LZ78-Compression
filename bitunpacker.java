@@ -1,6 +1,3 @@
-//Amarjot Parmar
-//1255668
-
 class bitunpacker
 {
     private static double currentMax = 0;
@@ -125,3 +122,4 @@ class bitunpacker
     }
 
 }
+

@@ -89,6 +89,7 @@ class decoder
 
         while (temp != 0)
         {
+
             linetoPrint.add(Mismatch.get(temp));
             temp = phraseNumber.get(temp);
         }
