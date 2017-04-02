@@ -1,6 +1,3 @@
-//import java.io.FileInputStream;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -26,7 +23,7 @@ class Encoder{
 		    System.out.print(pair[0]);
 		    System.out.println(pair[1]);
 		    if(dropZeros(Integer.toBinaryString(trie.nextID)).length()>maxSize){
-			System.out.println("\u001B");
+			System.out.println("\u0000");
 			trie.reset();
 		    }
 		    buf=new int[bufMax];
@@ -35,7 +32,6 @@ class Encoder{
             }
 	    if(pair.length>0)
 	    	System.out.print(pair[0]);
-	    System.out.print("\u0000");
 	}catch(IOException e){
 	    System.err.println("Usage: java Encoder <Dictionary Size(bits)>");
 	}catch(Exception e){

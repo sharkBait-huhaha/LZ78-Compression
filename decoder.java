@@ -36,7 +36,7 @@ class decoder
             while((input = (byte) System.in.read()) != -1)
             {
                 //ESCAPE Symbol encountered
-                if(input == 27)
+                if(input == 0)
                 {
                     if(lineList.size() != 0)
                     {
