@@ -30,8 +30,12 @@ class Encoder{
 		    pair=new String[0];
 		}
             }
-	    if(pair.length>0)
-	    	System.out.print(pair[0]);
+	    if(pair.length>0){
+		if(pair.length==1)
+		    pair=new String[]{pair[0], "\u0000"};
+		System.out.print(pair[0]);
+		System.out.print(pair[1]);
+	    }
 	}catch(IOException e){
 	    System.err.println("Usage: java Encoder <Dictionary Size(bits)>");
 	}catch(Exception e){
@@ -78,3 +82,4 @@ class TrieNode{
 	nextID=1;
     }
 }
+
